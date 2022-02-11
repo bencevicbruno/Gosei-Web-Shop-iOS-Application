@@ -1,0 +1,40 @@
+/* 
+  Localization.strings
+  Gosei
+
+  Created by Bruno Benčević on 05.02.2022..
+  
+*/
+
+"cancel" = "Odustani";
+"close" = "Zatvori";
+"confirm" = "Potvrdi";
+"email" = "Email";
+"log_in" = "Prijavi se";
+"login_is_not_implemented" = "Prijava nije implementirana.";
+"new_to_gosei" = "Prvi put koristiš Gosei?";
+"or" = "ili";
+"password" = "Lozinka";
+"passwords_not_matching" = "Lozinke se ne podudaraju";
+"payment_details" = "Podaci o plaćanju";
+"payment_successful" = "Plaćanje uspiješno";
+"repeat_password" = "Ponovi lozinku";
+"sign_out" = "Odjavi se";
+"sign_out_message" = "Jeste li sigurni da se želite odjaviti? Možete se prijaviti opet kasnije.";
+"sign_up" = "Registriraj se";
+"shipping_details" = "Podaci o dostavi";
+"wrong_credidentials" = "Pogrešan email ili lozinka.";
+"account_info" = "Podaci o računu";
+"my_orders" = "Moje narudžbe";
+"language" = "Jezik";
+"help" = "Pomoć";
+"light" = "Svijetlo";
+"dark" = "Tamno";
+"kitchen_appliances" = "Kuhinjski uređaji";
+"home_security" = "Sigurnost doma";
+"apple_devices" = "Apple uređaji";
+"vacuum_cleaners" = "Pametni usisavači";
+"smart_lighting" = "Pametno osvijetljenje";
+"temperature_control" = "Kontrola temperature";
+"promotional_products" = "Promotivni proizvodi";
+

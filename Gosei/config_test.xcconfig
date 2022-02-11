@@ -1,0 +1,11 @@
+//
+//  config_test.xcconfig
+//  Gosei
+//
+//  Created by Bruno Benčević on 02.02.2022..
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+googleSignInID = 1074481682711-1rj2m9gt6htoo8m932rgtrc6gq7ugelp.apps.googleusercontent.com

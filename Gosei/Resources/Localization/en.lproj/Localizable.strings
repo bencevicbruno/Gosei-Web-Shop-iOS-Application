@@ -1,0 +1,39 @@
+/* 
+  Localization.strings
+  Gosei
+
+  Created by Bruno Benčević on 05.02.2022..
+  
+*/
+
+"cancel" = "Cancel";
+"close" = "Close";
+"confirm" = "Confirm";
+"email" = "Email";
+"log_in" = "Log in";
+"login_is_not_implemented" = "Login not implemented.";
+"new_to_gosei" = "New to Gosei?";
+"or" = "or";
+"password" = "Paswword";
+"passwords_not_matching" = "Password are not matching";
+"payment_details" = "Payment Details";
+"payment_successful" = "Payment Successful";
+"repeat_password" = "Repeat password";
+"shipping_details" = "Shipping Details";
+"sign_out" = "Sign out";
+"sign_out_message" = "Are you sure you want to sign out? You can sign in again later.";
+"sign_up" = "Sign up";
+"wrong_credidentials" = "invalid credidentials";
+"account_info" = "Account info";
+"my_orders" = "My Orders";
+"language" = "Language";
+"help" = "Help";
+"light" = "Light";
+"dark" = "Dark";
+"kitchen_appliances" = "Kitchen Appliances";
+"home_security" = "Home Security";
+"apple_devices" = "Apple Devices";
+"vacuum_cleaners" = "Vacuum Cleaners";
+"smart_lighting" = "Smart Lighting";
+"temperature_control" = "Temperature Control";
+"promotional_products" = "Promotional Products";

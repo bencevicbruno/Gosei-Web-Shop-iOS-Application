@@ -9,33 +9,32 @@ import Foundation
 import UIKit
 import SwiftUI
 import GoogleSignIn
+import Fusion
 
 final class RootCoordinator: Coordinator {
     
     var childCoordinator: Coordinator?
     let navigationController: UINavigationController
-    let services: ServicesProtocol
     
-    init(navigationController: UINavigationController, services: ServicesProtocol) {
+    @Inject var persistenceService: PersistenceServiceProtocol
+    
+    init(navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.services = services
     }
     
     func start() {
-        let persistenceService = services.persistenceService
-        
         let vc = UIHostingController(rootView: LaunchScreen())
         navigationController.viewControllers = [vc]
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
+            GIDSignIn.sharedInstance.restorePreviousSignIn { [weak self] user, error in
                 if error != nil || user == nil {
-                    self.goToLogin()
+                    self?.goToLogin()
                 } else {
-                    if let user = persistenceService.user {
-                        self.goToMain(user: user)
+                    if let user = self?.persistenceService.user {
+                        self?.goToMain(user: user)
                     } else {
-                        self.goToLogin()
+                        self?.goToLogin()
                     }
                 }
             }
@@ -46,7 +45,7 @@ final class RootCoordinator: Coordinator {
 private extension RootCoordinator {
     
     func goToLogin() {
-        let vm = LoginViewModel(navigationController: self.navigationController, persistenceService: self.services.persistenceService)
+        let vm = LoginViewModel(navigationController: self.navigationController)
         let vc = UIHostingController(rootView: LoginView(viewModel: vm))
         
         vm.onGoToSignUp = { [weak self] in

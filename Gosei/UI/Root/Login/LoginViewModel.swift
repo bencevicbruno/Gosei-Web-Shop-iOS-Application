@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import GoogleSignIn
+import Fusion
 
 final class LoginViewModel: ObservableObject {
     
@@ -17,14 +18,13 @@ final class LoginViewModel: ObservableObject {
     @Published var externalLoginSheet: ExternalLoginType? = nil
     
     var navigationController: UINavigationController
-    var persistenceService: PersistenceServiceProtocol
+    @Inject var persistenceService: PersistenceServiceProtocol
     
     var onGoToSignUp: EmptyCallback?
     var onGoToMain: ((PersistenceData.User) -> Void)?
     
-    init(navigationController: UINavigationController, persistenceService: PersistenceServiceProtocol) {
+    init(navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.persistenceService = persistenceService
     }
 }
 

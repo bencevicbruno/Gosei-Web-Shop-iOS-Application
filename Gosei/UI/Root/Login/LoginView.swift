@@ -166,7 +166,7 @@ private extension LoginView {
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView(viewModel: LoginViewModel(navigationController: UINavigationController(), persistenceService: PersistenceService()))
+        LoginView(viewModel: LoginViewModel(navigationController: UINavigationController()))
             .previewDevices(.iPhone13, .iPhoneSE, .iPhone8)
     }
 }

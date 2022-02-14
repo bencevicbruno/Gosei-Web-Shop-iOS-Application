@@ -282,10 +282,10 @@
 		8C16DF1927A41020000BD7EC /* Product */ = {
 			isa = PBXGroup;
 			children = (
+				8C16E60B27B68BAB00B6BFF0 /* ProductCoordinator.swift */,
 				8C16DF1727A40B85000BD7EC /* ProductView.swift */,
 				8C16DF1A27A41050000BD7EC /* Subviews */,
 				8C16DF1D27A424BA000BD7EC /* ProductViewModel.swift */,
-				8C16E60B27B68BAB00B6BFF0 /* ProductCoordinator.swift */,
 				8C7B494427B1091C00B57C85 /* Checkout */,
 			);
 			name = Product;

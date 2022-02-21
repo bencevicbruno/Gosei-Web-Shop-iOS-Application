@@ -38,7 +38,6 @@ extension Font {
 extension Font {
     
     // MARK: - Utility
-    
     static func printFonts() {
         let fontFamilyNames = UIFont.familyNames
         for familyName in fontFamilyNames {

@@ -9,31 +9,87 @@ import SwiftUI
 
 struct LineGraphView: View {
     
-    private var data: [Double]
+    private var data: [Double] = [11, 680, 200, 200, 200, 200, 200, 600, 600, 600, 600, 50, 60, 265, 6, 123, 40, 80, 323]
     
     @State private var didAnimate = false
     
+    private var yMarkCount: Int
+    
     var body: some View {
-        LineGraph(data: data)
-            .trim(to: didAnimate ? 1 : 0)
-            .stroke(Color.red, lineWidth: 2)
-            .aspectRatio(16/9, contentMode: .fit)
-            .border(Color.gray, width: 1)
-            .padding()
-            .onAppear {
-                withAnimation(.easeOut) {
-                    didAnimate.toggle()
+            HStack(spacing: 0) {
+                VStack(alignment: .trailing, spacing: 0) {
+                    ForEach(0..<dataMarks.count, id: \.self) { index in
+                        Text("\(dataMarks[index], specifier: "%g")")
+                            .frame(height: 20)
+                        
+                        if index != dataMarks.count - 1 {
+                            Spacer()
+                        }
+                    }
+                    .font(.system(size: 20))
+                    .background(Color.gray.opacity(0.25))
                 }
+                .background(Color.gray.opacity(0.25))
+                
+                LineGraph(data: data, maxValue: dataMarks.first!)
+                    .stroke(.red, lineWidth: 2)
+                    .background(Color.gray.opacity(0.25))
+                    .padding(.vertical, 10)
             }
+        .padding()
     }
     
-    init(data: [Double]) {
-        self.data = data
+    func getHeight(_ proxy: GeometryProxy, index: Double) -> CGFloat {
+        return CGFloat(index + 0.5 / Double(dataMarks.count) * proxy.size.height)
+    }
+    
+    var stepValue: Double {
+        switch(data.max()!) {
+        case 0...50: return 5
+        case 50...150: return 10
+        case 200...300: return 20
+        case 300...: return 100
+        default: return 10
+        }
+    }
+    
+    var dataMarks: [Double] {
+        var marks = [0.0]
+        
+        var currentStep = 0.0
+        
+        repeat {
+            currentStep += stepValue
+            marks.append(currentStep)
+        } while currentStep < data.max()!
+        
+        return marks.reversed()
+    }
+    
+    init(yMarkCount: Int) {
+        self.yMarkCount = yMarkCount
+    }
+    
+}
+
+private extension LineGraphView {
+    
+    var yMaxMark: Int {
+        switch (data.max()!) {
+        case 0..<50: return 50
+        case 50..<100: return 100
+        case 100..<150: return 150
+        case 150..<200: return 200
+        case 200..<250: return 250
+        case 250..<300: return 300
+        default: return 50
+        }
     }
 }
 
 struct LineGraph: Shape {
     var data: [Double]
+    var isMask: Bool
     
     func path(in rect: CGRect) -> Path {
         func point(at index: Int) -> CGPoint {
@@ -53,16 +109,23 @@ struct LineGraph: Shape {
             for index in data.indices {
                 p.addLine(to: point(at: index))
             }
+            
+            if isMask {
+                p.addLine(to: CGPoint(x: rect.width, y: rect.height))
+                p.addLine(to: CGPoint(x: 0, y: rect.height))
+            }
         }
     }
     
-    init(data: [Double]) {
-        self.data = data.map { $0 / data.max()! }
+    init(data: [Double], maxValue: Double, isMask: Bool = false) {
+        self.data = data.map { $0 / maxValue}
+        self.isMask = isMask
     }
 }
 
 struct LineGraphView_Previews: PreviewProvider {
     static var previews: some View {
-        LineGraphView(data: [1, 3, 5, 6, 2, 6, 7, 4, 8, 3])
+        LineGraphView(yMarkCount: 10)
+            .frame(height: 400)
     }
 }

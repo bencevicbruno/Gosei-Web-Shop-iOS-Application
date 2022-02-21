@@ -471,13 +471,6 @@
 			path = Language;
 			sourceTree = "<group>";
 		};
-		8C3B84B5279F596E002D1127 /* UIKit */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = UIKit;
-			sourceTree = "<group>";
-		};
 		8C3B84B8279F5A61002D1127 /* My Orders */ = {
 			isa = PBXGroup;
 			children = (
@@ -713,7 +706,6 @@
 			isa = PBXGroup;
 			children = (
 				8C1FD9EB27955931002414B1 /* Foundation */,
-				8C3B84B5279F596E002D1127 /* UIKit */,
 				8C81A8A22753B18800ECE25B /* SwiftUI */,
 			);
 			path = Extensions;

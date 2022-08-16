@@ -9,123 +9,132 @@ import SwiftUI
 
 struct LineGraphView: View {
     
-    private var data: [Double] = [11, 680, 200, 200, 200, 200, 200, 600, 600, 600, 600, 50, 60, 265, 6, 123, 40, 80, 323]
+    let data = [ 40.0,
+                 51.0, 50.0, 50.0, 48.0, 47.0, 48.0, 59.0,
+                 64.0, 64.0, 64.0, 64.0, 64.0, 64.0, 64.0,
+                 64.0, 64.0, 64.0, 64.0, 64.0, 64.0, 64.0,
+                 64.0, 64.0, 64.0, 64.0, 64.0, 64.0, 64.0,
+                 64.0, 64.0, 64.0, 64.0, 64.0, 64.0, 64.0,
+                 64.0, 64.0, 64.0, 64.0, 64.0, 64.0, 64.0,
+                 52.0, 51.0, 49.0, 50.0, 49.0, 49.0, 48.0,
+                 47.0, 47.0, 47.0, 47.0, 49.0, 48.0, 49.0,
+                 49.0, 49.0, 49.0, 48.0, 49.0, 49.0, 48.0,
+                 49.0, 58.0, 62.0, 77.0, 80.0, 79.0, 78.0,
+                 64.0, 64.0, 64.0, 64.0, 64.0, 64.0, 64.0,
+                 71.0, 71.0, 68.0, 66.0, 67.0, 65.0, 58.0, 100.0,
+                 57.0, 57.0, 56.0, 58.0, 57.0, 57.0, 55.0,
+                 59.0, 57.0, 56.0, 55.0, 54.0, 53.0, 52.0,
+                 51.0, 51.0, 51.0, 61.0, 61.0, 61.0, 60.0,
+                 57.0, 56.0, 57.0, 54.0, 54.0, 54.0, 54.0]
     
-    @State private var didAnimate = false
     
-    private var yMarkCount: Int
+    
+    let fontSize: CGFloat = 20
+    
+    var dataMax: Double {
+        data.max()!
+    }
+    
+    var dataMin: Double {
+        data.min()!
+    }
     
     var body: some View {
-            HStack(spacing: 0) {
-                VStack(alignment: .trailing, spacing: 0) {
-                    ForEach(0..<dataMarks.count, id: \.self) { index in
-                        Text("\(dataMarks[index], specifier: "%g")")
-                            .frame(height: 20)
-                        
-                        if index != dataMarks.count - 1 {
-                            Spacer()
-                        }
-                    }
-                    .font(.system(size: 20))
-                    .background(Color.gray.opacity(0.25))
+        GeometryReader { geo in
+            Image(uiImage: Dataset(data).drawGraph(in: CGRect(origin: .zero, size: geo.size)))
+                .resizable()
+                .scaledToFit()
+                .foregroundColor(.blue)
+                .background(.blue.opacity(0.1))
+        }
+//        .aspectRatio(1.5, contentMode: .fit)
+        .padding()
+        .background(.blue.opacity(0.1))
+    }
+    
+    var test: some View {
+        GeometryReader { geoProxy in
+            VStack(spacing: 0) {
+                HStack(alignment: .bottom) {
+                    markers(viewHeight: geoProxy.size.height)
+                    
+                    LineGraphShape(dataset: Dataset(data))
+                        .stroke(Color(uiColor: .systemPink), lineWidth: 2)
+                        .background(graphBackground.mask(LineGraphShape(dataset: Dataset(data), isMask: true)))
+                        .padding(.vertical, fontSize / 2)
                 }
+                .padding()
                 .background(Color.gray.opacity(0.25))
                 
-                LineGraph(data: data, maxValue: dataMarks.first!)
-                    .stroke(.red, lineWidth: 2)
-                    .background(Color.gray.opacity(0.25))
-                    .padding(.vertical, 10)
+                Text("hehe")
             }
-        .padding()
+        }
+        .aspectRatio(1.2, contentMode: .fit)
+        .font(.system(size: fontSize))
     }
     
-    func getHeight(_ proxy: GeometryProxy, index: Double) -> CGFloat {
-        return CGFloat(index + 0.5 / Double(dataMarks.count) * proxy.size.height)
+    var graphBackground: some View {
+        let colors: [UIColor] = [
+            .lightGray, .lightGray, .lightGray, .lightGray, .systemPink, .systemPink, .systemPink, .purple
+        ]
+        
+        return LinearGradient(colors: colors.map { Color(uiColor: $0.withAlphaComponent(0.4)) }, startPoint: .top, endPoint: .bottom)
     }
     
-    var stepValue: Double {
-        switch(data.max()!) {
-        case 0...50: return 5
-        case 50...150: return 10
-        case 200...300: return 20
-        case 300...: return 100
-        default: return 10
+    func markers(viewHeight: CGFloat) -> some View {
+        VStack(spacing: 0) {
+            ForEach(0..<(yAxisLabels(viewHeight: viewHeight).count)) { index in
+                Text(yAxisLabels(viewHeight: viewHeight)[index])
+                    .fontWeight(.medium)
+                
+                if index != yAxisLabels(viewHeight: viewHeight).count - 1 {
+                    Spacer()
+                }
+            }
         }
     }
     
-    var dataMarks: [Double] {
-        var marks = [0.0]
+    func yAxisLabels(viewHeight: CGFloat) -> [String] {
+        let numberOfMidValues = max(1, Int(viewHeight / (fontSize + 40)))
+        let dataRange = dataMax - dataMin
+        let step = dataRange / (Double(numberOfMidValues) + 1)
         
-        var currentStep = 0.0
+        var labels: [String] = ["\(dataMin)"]
         
-        repeat {
-            currentStep += stepValue
-            marks.append(currentStep)
-        } while currentStep < data.max()!
+        for i in 1...numberOfMidValues {
+            labels.append(String(format: "%.2f", dataMin + step * Double(i)))
+        }
         
-        return marks.reversed()
+        labels.append("\(dataMax)")
+        
+        return labels.reversed()
     }
     
-    init(yMarkCount: Int) {
-        self.yMarkCount = yMarkCount
-    }
-    
+//    func drawRectangle() {
+//        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 512, height: 512))
+//
+//        let img = renderer.image { ctx in
+//            // awesome drawing code
+//        }
+//
+//        imageView.image = img
+//    }
 }
 
-private extension LineGraphView {
-    
-    var yMaxMark: Int {
-        switch (data.max()!) {
-        case 0..<50: return 50
-        case 50..<100: return 100
-        case 100..<150: return 150
-        case 150..<200: return 200
-        case 200..<250: return 250
-        case 250..<300: return 300
-        default: return 50
-        }
-    }
-}
 
-struct LineGraph: Shape {
-    var data: [Double]
-    var isMask: Bool
-    
-    func path(in rect: CGRect) -> Path {
-        func point(at index: Int) -> CGPoint {
-            let point = data[index]
-            
-            let x = rect.width * CGFloat(index) / CGFloat(data.count - 1)
-            let y = (1 - point) * rect.height
-            
-            return CGPoint(x: x, y: y)
-        }
-        
-        return Path { p in
-            guard data.count > 1 else { return }
-            
-            let start = data[0]
-            p.move(to: CGPoint(x: 0, y: (1 - start) * rect.height))
-            for index in data.indices {
-                p.addLine(to: point(at: index))
-            }
-            
-            if isMask {
-                p.addLine(to: CGPoint(x: rect.width, y: rect.height))
-                p.addLine(to: CGPoint(x: 0, y: rect.height))
-            }
+extension VerticalAlignment {
+    struct XAxisAlignment: AlignmentID {
+        static func defaultValue(in d: ViewDimensions) -> CGFloat {
+            d[.top]
         }
     }
-    
-    init(data: [Double], maxValue: Double, isMask: Bool = false) {
-        self.data = data.map { $0 / maxValue}
-        self.isMask = isMask
-    }
+
+    static let xAxisAlignment = VerticalAlignment(XAxisAlignment.self)
 }
 
 struct LineGraphView_Previews: PreviewProvider {
     static var previews: some View {
-        LineGraphView(yMarkCount: 10)
+        LineGraphView()
             .frame(height: 400)
     }
 }

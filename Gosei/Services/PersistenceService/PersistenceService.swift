@@ -33,7 +33,7 @@ final class PersistenceService: PersistenceServiceProtocol {
             return UserDefaults.load(key: .color_scheme) ?? .light
         }
         set {
-            UIApplication.shared.statusBarStyle = newValue == .light ? .lightContent : .darkContent
+//            UIApplication.shared.statusBarStyle = newValue == .light ? .lightContent : .darkContent
             UserDefaults.save(newValue, key: .color_scheme)
         }
     }
